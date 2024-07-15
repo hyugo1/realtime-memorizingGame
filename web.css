@@ -1,0 +1,291 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #e6e6fa;
+    /* background-color: #6ed3cf; */
+    /* background-color: #94f0f1; */
+}
+
+.title {
+    font-size: 34px;
+    font-family: 'Pixelify Sans';
+    margin-top: 5px;
+    -webkit-text-stroke: 1px #781a44; 
+    text-stroke: 1px #781a44;
+    color: #f2b1d8;
+}
+
+.memory-game {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 16px;
+    margin-bottom: 10px;
+    width: 800px; 
+    height: 550px; 
+}
+
+.players {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 3em;
+    /* font-family: 'Rubik', sans-serif; */
+    font-family: 'Pixelify Sans';
+    border: 2px solid #ff414e;
+    min-height: 100px; 
+    background-color: #fffe9a;
+    -webkit-text-stroke: 1px #c25dad;
+    text-stroke: 1px #c25dad;
+    /* text-align: center; */
+}
+
+.player {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.player .score {
+    color: black;
+    font-family: 'Rubik', sans-serif;
+    /* font-family: 'Pixelify Sans'; */
+    text-align: right;
+    width: 40px;
+}
+
+.player.current {
+    /* background-color: #ffd555; */
+    /* border: 2px solid rgb(255, 209, 72); */
+    /* background-color: #beef00; */
+    background-color: #fffdd0;
+    border: 2px solid #ff414e;
+    /* font-family: 'Rubik', sans-serif; */
+    font-family: 'Pixelify Sans';
+    font-size: 3rem;
+    width: 100%;
+    -webkit-text-stroke: 1px #c25dad;
+    text-stroke: 1px #c25dad;
+
+}
+.player.current .score {
+    /* font-family: 'Pixelify Sans'; */
+    width: 50px; 
+}
+
+.turn-message {
+    font-size: 2rem;
+    font-family: 'Pixelify Sans';
+    color: #ff414e;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    -webkit-text-stroke: 1px #c25dad;
+    text-stroke: 1px #c25dad;
+}
+
+
+.card {
+    width: 100px;
+    height: 120px;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+
+.cardInner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    transform: rotateY(180deg);
+    position:relative;
+    /* transform: rotateY(0deg); */
+}
+
+.cardOpen .cardInner {
+    transform: rotateY(0deg);
+    /* transform: rotateY(180deg); */
+}
+
+
+/* this is teh side that shows the design */
+.cardFront {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    backface-visibility: hidden;
+    /* border: 1.5px solid rgba(181,44,44,255); */
+    /* border: #ff1d58; */
+    border-radius: 5px;
+    background-color: #ff1d58;
+}
+
+.cardFront img {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* this is the side that shows the images */
+.cardBack {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    backface-visibility: hidden;
+    border: 2px solid rgb(18, 17, 22);
+    border-radius: 5px;
+    /* background-color: #fbe3e8; */
+    /* background-color: #fceed1; */
+    /* background-color: #eeeeee; */
+    background-color: #f7f7f7;
+    
+
+}
+.cardBack img {
+    width: 80%; 
+    height: 80%;
+}
+
+.cardMatch.player1 .cardBack {
+    background-color: #51d0de; 
+}
+
+.cardMatch.player2 .cardBack {
+    background-color: #ffa8B6;
+}
+
+.cardFront {
+    transform: rotateY(180deg);
+}
+
+.cardMatch .cardInner {
+    transform: rotateY(0deg);
+    pointer-events: none;
+
+}
+
+/* doenst mean you die :)  */
+.game-over-message {
+    display: none; 
+    font-family: 'Rubik', sans-serif;
+    text-align: center;
+    font-size: 2rem;
+    margin:auto;
+    transform: translate(-50%, -50%);
+    background-color: #f98655;
+    color: #1a1a1a;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 2px solid #0b0b7d;
+    font-family: 'Rubik', sans-serif;
+    display: inline-block;
+    animation: bounce 2s infinite;
+} 
+#winner-message {
+    background-color: #f98655;
+    color: #1a1a1a;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 2px solid #0b0b7d;
+    font-family: 'Rubik', sans-serif;
+    display: inline-block;
+    animation: bounce 2s infinite;
+}
+
+#restart-button {
+    position: flex;
+    /* right: 40px; */
+    margin: 0 auto;
+    margin-bottom: 20px;
+    /* top: 50%; */
+    background-color: #FFBF00;
+    color: rgb(16, 13, 13);
+    border: none;
+    padding: 10px 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    font-family: 'Pixelify Sans';
+    border: 1.5px solid #000080;
+}
+
+#restart-button:hover {
+    background-color: #FF5722;
+    transform: scale(1.10); 
+    color: white;
+}
+
+
+.go-back-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #f2b1d8;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1.5px solid #09c036;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-family: 'Pixelify Sans';
+}
+
+.go-back-button:hover {
+    background-color: #8bf0ba;
+    border: 1.5px solid #09c036;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#turn-counter {
+    /* font-family: 'Pixelify Sans'; */
+    font-family: 'Pixelify Sans';
+    font-size: 3rem;
+    color:#75f54e;
+    -webkit-text-stroke: 0.7px #000000; 
+    text-align: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-20px);
+    }
+    60% {
+      transform: translateY(-10px);
+    }
+  }
