@@ -11,13 +11,12 @@ let gameState = {
 };
 
 const cardImages = [
-    'images/8ball.png', 'images/baseball.png', 'images/basketball.png', 'images/football.png',
-    'images/world.png', 'images/tennisball.png', 'images/volleyball.png', 'images/orange.png',
-    'images/apple.png', 'images/clock.png', 'images/coin.png', 'images/cookie.png',
-    'images/pizza.png', 'images/donut.png', 'images/sun.png', 'images/star.png'
+    '8ball.png', 'baseball.png', 'basketball.png', 'football.png',
+    'world.png', 'tennisball.png', 'volleyball.png', 'orange.png',
+    'apple.png', 'clock.png', 'coin.png', 'cookie.png',
+    'pizza.png', 'donut.png', 'sun.png', 'star.png'
 ];
 
-// Duplicate the card images to create pairs of cards
 const cardImagesPairs = [...cardImages, ...cardImages];
 
 function shuffleArray(array) {
@@ -27,9 +26,8 @@ function shuffleArray(array) {
     }
 }
 
-shuffleArray(cardImagesPairs);
-
 function initializeGameState() {
+    shuffleArray(cardImagesPairs);
     gameState.cards = cardImagesPairs.map((image, index) => ({
         id: index,
         image,
@@ -39,10 +37,10 @@ function initializeGameState() {
     gameState.currentPlayer = 1;
     gameState.scores = { player1: 0, player2: 0 };
     gameState.totalFlippedCards = 0;
+    console.log('Game state initialized:', gameState.cards.map(card => card.image)); // Log shuffled cards
 }
 
 initializeGameState();
-
 let flippedCards = [];
 let totalPlayers = 0;
 
@@ -60,7 +58,7 @@ wss.on('connection', (ws) => {
             handleCardFlip(data.cardId);
         } else if (data.type === 'restart') {
             initializeGameState();
-            broadcastGameState();
+            broadcastGameState('restart');
         }
     });
 
@@ -80,7 +78,7 @@ function handleCardFlip(cardId) {
         flippedCards.push(card);
 
         if (flippedCards.length === 2) {
-            setTimeout(checkForMatch, 500); // Match this duration with your CSS transition duration
+            setTimeout(checkForMatch, 500);
         }
 
         gameState.totalFlippedCards++;
@@ -104,15 +102,15 @@ function checkForMatch() {
             flippedCards = [];
             gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
             broadcastGameState();
-        }, 500); // Ensure this delay matches the CSS animation duration
+        }, 500);
     }
 
     broadcastGameState();
 }
 
-function broadcastGameState() {
+function broadcastGameState(type = 'update') {
     players.forEach(player => {
-        player.send(JSON.stringify({ type: 'update', gameState }));
+        player.send(JSON.stringify({ type, gameState }));
     });
 }
 
