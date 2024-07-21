@@ -1,8 +1,10 @@
+// server.js
+// Description: This file contains the server-side code for the multiplayer memory card game.
 const WebSocket = require('ws');
-
 const wss = new WebSocket.Server({ port: 8080 });
 
-let players = [];
+let players = [null, null]; // Two player slots, initialized to null
+// Game state object
 let gameState = {
     cards: [],
     currentPlayer: 1,
@@ -17,8 +19,10 @@ const cardImages = [
     'pizza.png', 'donut.png', 'sun.png', 'star.png'
 ];
 
+// Duplicate the card images to create pairs
 const cardImagesPairs = [...cardImages, ...cardImages];
 
+// Shuffle an array in place, using the Fisher-Yates algorithm
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -26,6 +30,7 @@ function shuffleArray(array) {
     }
 }
 
+// Initialize the game state with shuffled cards
 function initializeGameState() {
     shuffleArray(cardImagesPairs);
     gameState.cards = cardImagesPairs.map((image, index) => ({
@@ -42,14 +47,42 @@ function initializeGameState() {
 
 initializeGameState();
 let flippedCards = [];
-let totalPlayers = 0;
+let lastDisconnectedPlayer = null;
 
+// Handle new player connections
 wss.on('connection', (ws) => {
-    totalPlayers++;
-    console.log('A new player connected. Total players: ' + totalPlayers);
-    
-    players.push(ws);
-    ws.send(JSON.stringify({ type: 'start', player: players.length, gameState }));
+    let playerNumber = null;
+    console.log('A new player has joined.');
+
+    // Find the first available slot for the new player
+    if (lastDisconnectedPlayer !== null) {
+        playerNumber = lastDisconnectedPlayer;
+        players[playerNumber - 1] = ws;
+        lastDisconnectedPlayer = null;
+    } else {
+        for (let i = 0; i < players.length; i++) {
+            if (players[i] === null) {
+                players[i] = ws;
+                playerNumber = i + 1; // Player numbers are 1 and 2
+                break;
+            }
+        }
+    }
+
+    if (playerNumber === null) {
+        // No available slot, disconnect the new player
+        ws.send(JSON.stringify({ type: 'full', message: 'The game is full. Please wait until the game is over.' }));
+        ws.close();
+        return;
+    }
+
+    console.log(`Player ${playerNumber} connected. Total players: ${players.filter(Boolean).length}`);
+
+    // Reset game state when a new player joins
+    initializeGameState();
+    broadcastGameState('restart');
+
+    ws.send(JSON.stringify({ type: 'start', player: playerNumber, gameState }));
 
     ws.on('message', (message) => {
         const data = JSON.parse(message);
@@ -63,13 +96,13 @@ wss.on('connection', (ws) => {
     });
 
     ws.on('close', () => {
-        totalPlayers--;
-        gameState.totalFlippedCards = 0;
-        console.log('A player disconnected. Total players: ' + totalPlayers);
-        players = players.filter(player => player !== ws);
+        console.log(`Player ${playerNumber} disconnected. Total players: ${players.filter(Boolean).length}`);
+        players[playerNumber - 1] = null;
+        lastDisconnectedPlayer = playerNumber; // Track the slot of the disconnected player
     });
 });
 
+// Handle card flip action. If two cards are flipped, check for a match
 function handleCardFlip(cardId) {
     const card = gameState.cards.find(card => card.id === cardId);
 
@@ -86,6 +119,7 @@ function handleCardFlip(cardId) {
     }
 }
 
+// Check if the flipped cards match
 function checkForMatch() {
     const [card1, card2] = flippedCards;
 
@@ -108,9 +142,12 @@ function checkForMatch() {
     broadcastGameState();
 }
 
+// Broadcast the game state to all players
 function broadcastGameState(type = 'update') {
     players.forEach(player => {
-        player.send(JSON.stringify({ type, gameState }));
+        if (player) {
+            player.send(JSON.stringify({ type, gameState }));
+        }
     });
 }
 

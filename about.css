@@ -39,13 +39,14 @@ body {
     background-color: #61dafb;
     text-decoration: none;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
-    border: 1.5px solid #09c036;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    border: 1.5px solid #333333;
 }
 
 .go-back-button:hover {
     background-color: #21a1f1;
-    border: 1.5px solid #09c036;
+    border: 1.5px solid #333333;
+    scale: 1.10;
 }
 
 
