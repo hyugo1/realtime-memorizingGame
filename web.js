@@ -1,6 +1,8 @@
 //web.js
 // Description: This file contains the client-side code for the multiplayer memory card game.
-const socket = new WebSocket('ws://localhost:8080');
+// const socket = new WebSocket('ws://localhost:8080');
+require('dotenv').config();
+const socket = new WebSocket(process.env.WEBSOCKET_URL);
 
 let playerNumber = 0;
 // gameState object

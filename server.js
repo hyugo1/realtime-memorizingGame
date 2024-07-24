@@ -1,7 +1,7 @@
 // server.js
 // Description: This file contains the server-side code for the multiplayer memory card game.
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ port: 6060 });
 
 let players = [null, null]; // Two player slots, initialized to null
 // Game state object
