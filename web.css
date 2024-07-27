@@ -197,30 +197,13 @@ body {
     /* background-color: #fbe3e8; */
     /* background-color: #fceed1; */
     /* background-color: #eeeeee; */
-    /* background-color: #f7f7f7; */
+    background-color: #f7f7f7;
 }
 
 .cardBack img {
     width: 85%; 
     height: 85%;
-}
-
-/* .cardMatch.player1 .cardBack {
-    background-color: #51d0de; 
-}
-
-.cardMatch.player2 .cardBack {
-    background-color: #ffa8B6;
-}
-
-.cardMatchPlayer1 .cardBack {
-    background-color: #51d0de;
-}
-
-.cardMatchPlayer2 .cardBack {
-    background-color: #ffa8B6;
-} */
- 
+} 
 
 .cardFront {
     transform: rotateY(180deg);
@@ -230,18 +213,6 @@ body {
     transform: rotateY(0deg);
     pointer-events: none;
 
-}
-
-/* Style for Player 1's matched cards */
-.card.matched-player1 {
-    background-color: blue; /* Change this to the desired color */
-    color: white; /* Optional: to ensure text is readable */
-}
-
-/* Style for Player 2's matched cards */
-.card.matched-player2 {
-    background-color: red; /* Change this to the desired color */
-    color: white; /* Optional: to ensure text is readable */
 }
 
 /* doenst mean you die :)  */
@@ -308,11 +279,6 @@ body {
     transform: scale(1.10); 
 }
 
-/* .game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-} */
 .game-container {
     flex: 1;
     display: flex;
