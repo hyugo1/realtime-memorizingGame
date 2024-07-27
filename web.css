@@ -59,7 +59,7 @@ body {
 
 .player.current {
     background-color: #80eef4;
-    border: 2px solid #ff414e;
+    border: 2px solid #333333;
     font-size: 2rem;
     width: 100%;
 }
