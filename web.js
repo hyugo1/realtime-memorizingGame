@@ -1,8 +1,9 @@
 //web.js
 // Description: This file contains the client-side code for the multiplayer memory card game.
 // const socket = new WebSocket('ws://localhost:8080');
-require('dotenv').config();
-const socket = new WebSocket(process.env.WEBSOCKET_URL);
+const socket = new WebSocket('ws://localhost:6060');
+// require('dotenv').config();
+// const socket = new WebSocket(process.env.WEBSOCKET_URL);
 
 let playerNumber = 0;
 // gameState object
@@ -261,6 +262,16 @@ if (restartButton) {
 
 // Function to display the player number. It should display the player number based on the playerNumber variable
 function displayPlayerInfo(playerNumber) {
+    // const playerNumberElement = document.getElementById('player-number');
+    // const playerInfoMessageElement = document.getElementById('player-info-message');
+    // if (playerNumberElement && playerInfoMessageElement) {
+    //     playerNumberElement.textContent = playerNumber;
+    //     if (playerNumber === 1) {
+    //         playerInfoMessageElement.innerHTML = "You are: <span style='color: blue;'>Player 1</span>";
+    //     } else {
+    //         playerInfoMessageElement.innerHTML = "You are: <span style='color: red;'>Player 2</span>";
+    //     }
+    // }
     const playerNumberElement = document.getElementById('player-number');
     if (playerNumberElement) {
         playerNumberElement.textContent = playerNumber;
@@ -268,7 +279,6 @@ function displayPlayerInfo(playerNumber) {
 }
 
 // WebSocket event listeners
-
 socket.addEventListener('close', function () {
     console.log('WebSocket connection closed.');
 });

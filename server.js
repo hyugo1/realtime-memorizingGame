@@ -151,4 +151,4 @@ function broadcastGameState(type = 'update') {
     });
 }
 
-console.log('Server running on ws://localhost:8080');
+console.log('Server running on ws://localhost:6060');
